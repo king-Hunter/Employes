@@ -18,8 +18,9 @@ use App\Http\Controllers\HomeController;
 Auth::routes();
 
 Route::group(['middleware' => ['web', 'auth']], function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/add', [HomeController::class, 'getAddNew'])->name('getAdd');
+    Route::post('/add', [HomeController::class, 'postAddNew'])->name('postAdd');
 });
 
 

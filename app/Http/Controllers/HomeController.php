@@ -26,4 +26,15 @@ class HomeController extends Controller
         $item = $this->modelo->getListEmploye();
         return view('home',  compact('item'));        
     }
+    public function getAddNew(){
+        $item = $this->modelo->webServices();
+        return view('form',  compact('item'));
+    }
+    public function postAddNew(Request $request){
+        $reponse = $this->modelo->saveNew($request);
+                if ($reponse) {
+                    return redirect()->route('home')->with('success', 'Incorporated employees');
+                } 
+                return redirect()->route('home')->with('error', 'Error occurred');
+    }
 }
