@@ -91,10 +91,12 @@
                                         <td>
                                            <a onclick="viewInfo({{ $i->id }})">
                                             <span type="button" class=" view fa fa-eye"></span>
-                                               </a> 
+                                            </a> 
                                         </td>
                                         <td>
-                                            <span type="button" class="edit fa fa-edit"></span>
+                                            <a href="{{ route('getEditE', $i->id) }}">
+                                                <span type="button" class="edit fa fa-edit"></span>
+                                            </a>
                                         </td>
                                         <td>
                                             <a type="button" onclick="confirmarEliminar({{ $i->id }})">
@@ -230,7 +232,7 @@
                         $(".employe" + id + " .chatatus").addClass('d-block');
                         $(".employe" + id + " .statusActive").removeClass('d-none');
                         $(".employe" + id + " .statusActive").addClass('d-block');
-                    }, 2000);
+                    }, 1000);
                     }
                     else {
                         $(".employe" + id + " .statusActive").removeClass('d-block');
@@ -242,7 +244,7 @@
                         $(".employe" + id + " .chatatus").addClass('d-block');
                         $(".employe" + id + " .statusInactive").removeClass('d-none');
                         $(".employe" + id + " .statusInactive").addClass('d-block');
-                    }, 2000);
+                    }, 1000);
                     }
                 }
                          

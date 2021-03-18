@@ -120,7 +120,7 @@ class HomeModel extends Model
             DB::beginTransaction();
             $salary =  $this->coinType($data);
             $codeUnic = $this->codeGenerate();
-            while (Employe::where('code',$codeUnic)->count() > 0) {
+            while (Employe::where('code', $codeUnic)->count() > 0) {
                 $codeUnic = $this->codeGenerate();
             }
             Employe::create([
@@ -203,5 +203,52 @@ class HomeModel extends Model
         );
         $preobj = json_decode(json_encode($object));
         return $this->coinType($preobj);
+    }
+    public function getByEmployee($id)
+    {
+        return Employe::find($id);
+    }
+    public function typeSalary($type, $employe)
+    {
+        switch ($type) {
+            case 'MXN':
+                $currencySalary = $employe->salary_pesos;
+                break;
+            case 'USD':
+                $currencySalary = $employe->salary_dollar;
+                break;
+            default:
+                return null;
+                break;
+        }
+        return $currencySalary;
+    }
+    public function saveEdit($data, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $employe = Employe::find($id);
+            if ($data->salary != null) {
+                $salary = $this->coinType($data);
+            } else {
+                $salaryCurrency = $this->typeSalary($data->typeSalary, $employe);
+                $data->salary = $salaryCurrency;
+                $salary = $this->coinType($data);
+            }
+            $employe->name = $data->name;
+            $employe->salary_dollar = $salary->USD;
+            $employe->salary_pesos = $salary->MXN;
+            $employe->address = $data->address;
+            $employe->state = $data->state;
+            $employe->city = $data->city;
+            $employe->phone = $data->phone;
+            $employe->email = $data->email;
+            $employe->save();
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return false;
+        }
     }
 }

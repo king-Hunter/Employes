@@ -11,7 +11,7 @@
                 <div class="col-xs-6 col-sm-6 col-md-6">
                     <div class="form-group">
                         <label>Name </label>
-                        <input type="text" name="name" id="name" class="form-control input-sm" placeholder=" Jhon Connor"
+                        <input pattern="[A-Z, a-z, ]*" type="text" name="name" id="name" class="form-control input-sm" placeholder=" Jhon Connor"
                             required>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                                         <span class="input-group-text">$</span>
                                     </div>
                                     <input type="number" name="salary" id="salary" class="form-control input-sm"
-                                        placeholder="34.56" required>
+                                        placeholder="34" required>
                                 </div>
                             </div>
                         </div>
@@ -98,18 +98,19 @@
 
 @endsection
 @section('js')
+    <script src="{{ asset('js/app.js') }}" ></script>
     <script type='text/javascript'
         src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type='text/javascript'>
         $(window).on('load', function() {
             var phones = [{
                 "mask": "(###) ###-####"
-            }, {
-                "mask": "(###) ###-##############"
             }];
             $('#phone').inputmask({
                 mask: phones,
                 greedy: false,
+                showMaskOnFocus: false, 
+                showMaskOnHover: false,
                 definitions: {
                     '#': {
                         validator: "[0-9]",
@@ -117,17 +118,33 @@
                     }
                 }
             });
-            var name = [{
-                "mask": "#############"
-            }, {
-                "mask": "####################"
-            }, {
-                "mask": "###########################"
-            }, {
-                "mask": "###################################"
-            }, {
-                "mask": "###############################################"
-            }];
+            /*
+            var name = [
+                {"mask": "#"},
+                {"mask": "##"},
+                {"mask": "###"},
+                {"mask": "####"},
+                {"mask": "#####"},            
+                {"mask": "######"},            
+                {"mask": "#######"},            
+                {"mask": "########"},            
+                {"mask": "#########"},            
+                {"mask": "##########"},            
+                {"mask": "###########"},            
+                {"mask": "############"},            
+                {"mask": "#############"},
+                {"mask": "##############"},
+                {"mask": "###############"},
+                {"mask": "################"},            
+                {"mask": "#################"},            
+                {"mask": "##################"},            
+                {"mask": "###################"},
+                {"mask": "####################"},
+                {"mask": "#####################"},
+                {"mask": "######################"},
+                {"mask": "#######################"},
+                {"mask": "########################"}
+        ];
             $('#name').inputmask({
                 mask: name,
                 greedy: false,
@@ -138,7 +155,8 @@
                     }
                 }
             });
-        });
+        */
+    });
         const campoNumerico = document.getElementById('salary');
 
         campoNumerico.addEventListener('keydown', function(evento) {

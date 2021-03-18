@@ -80,4 +80,15 @@ class HomeController extends Controller
             'data' => $validate['data']
         ];
     }
+    public function getEdit($id){
+        $item = $this->modelo->getByEmployee($id);
+        return view('edit',  compact('item'));
+    }
+    public function postEdit(Request $request,$id){
+        $reponse = $this->modelo->saveEdit($request,$id);
+        if ($reponse) {
+            return redirect()->route('home')->with('success', 'Incorporated employees');
+        }
+        return redirect()->route('home')->with('error', 'Error occurred');        
+    }
 }
