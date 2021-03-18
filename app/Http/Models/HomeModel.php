@@ -120,6 +120,9 @@ class HomeModel extends Model
             DB::beginTransaction();
             $salary =  $this->coinType($data);
             $codeUnic = $this->codeGenerate();
+            while (Employe::where('code',$codeUnic)->count() > 0) {
+                $codeUnic = $this->codeGenerate();
+            }
             Employe::create([
                 'code' => $codeUnic,
                 'name' => $data->name,

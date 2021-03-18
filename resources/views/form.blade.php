@@ -64,8 +64,8 @@
                 <div class="col-xs-4 col-sm-4 col-md-4">
                     <div class="form-group">
                         <label>State </label>
-                        <input type="text" name="state" id="state" class="form-control input-sm" placeholder="Yorkshire del Oeste"
-                            required>
+                        <input type="text" name="state" id="state" class="form-control input-sm"
+                            placeholder="Yorkshire del Oeste" required>
                     </div>
                 </div>
                 <div class="col-xs-4 col-sm-4 col-md-4">
@@ -80,7 +80,8 @@
                 <div class="col-xs-5 col-sm-5 col-md-5">
                     <div class="form-group">
                         <label>Phone </label>
-                        <input type="tel" name="phone" id="phone" class="form-control input-sm" placeholder="(241) 445-4652" required>
+                        <input type="tel" name="phone" id="phone" class="form-control input-sm" placeholder="(241) 445-4652"
+                            required>
                     </div>
                 </div>
             </div>
@@ -97,7 +98,8 @@
 
 @endsection
 @section('js')
-<script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    <script type='text/javascript'
+        src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
     <script type='text/javascript'>
         $(window).on('load', function() {
             var phones = [{
@@ -105,7 +107,7 @@
             }, {
                 "mask": "(###) ###-##############"
             }];
-                $('#phone').inputmask({
+            $('#phone').inputmask({
                 mask: phones,
                 greedy: false,
                 definitions: {
@@ -125,9 +127,8 @@
                 "mask": "###################################"
             }, {
                 "mask": "###############################################"
-            }
-        ];
-                $('#name').inputmask({
+            }];
+            $('#name').inputmask({
                 mask: name,
                 greedy: false,
                 definitions: {
@@ -136,7 +137,32 @@
                         cardinality: 1
                     }
                 }
-            });  
+            });
+        });
+        const campoNumerico = document.getElementById('salary');
+
+        campoNumerico.addEventListener('keydown', function(evento) {
+            const teclaPresionada = evento.key;
+            const teclaPresionadaEsUnNumero =
+                Number.isInteger(parseInt(teclaPresionada));
+
+            const sePresionoUnaTeclaNoAdmitida =
+                teclaPresionada != 'ArrowDown' &&
+                teclaPresionada != 'ArrowUp' &&
+                teclaPresionada != 'ArrowLeft' &&
+                teclaPresionada != 'ArrowRight' &&
+                teclaPresionada != 'Backspace' &&
+                teclaPresionada != 'Delete' &&
+                teclaPresionada != 'Enter' &&
+                !teclaPresionadaEsUnNumero;
+            const comienzaPorCero =
+                campoNumerico.value.length === 0 &&
+                teclaPresionada == 0;
+
+            if (sePresionoUnaTeclaNoAdmitida || comienzaPorCero) {
+                evento.preventDefault();
+            }
+
         });
 
     </script>
