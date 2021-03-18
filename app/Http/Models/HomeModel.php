@@ -7,18 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client;
 use carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\This;
 use SebastianBergmann\CodeUnit\CodeUnit;
 
 class HomeModel extends Model
 {
     public function getListEmploye()
     {
-        $whereData = [
-            'active' => 1,
-            'delete' => 0
-        ];
-
-        $data['data'] = Employe::where($whereData)->get();
+        $data['data'] = Employe::where('delete', 0)->get();
         $data['info'] = count($data['data']);
         return $data;
     }
@@ -144,15 +140,65 @@ class HomeModel extends Model
             return false;
         }
     }
+    public function inactiveEmploye($id)
+    {
+        try {
+            DB::beginTransaction();
+            $data = Employe::find($id);
+            $data->delete = 1;
+            $data->save();
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return false;
+        }
+    }
+    public function changeStatus($id)
+    {
+        try {
+            DB::beginTransaction();
+            $data = Employe::find($id);
+            if ($data->active) {
+                $data->active = 0;
+                $value['status'] = false;
+            } else {
+                $data->active = 1;
+                $value['status'] = true;
+            }
+            $data->save();
+            DB::commit();
+            $value['data'] = true;
+            return $value;
+        } catch (\Throwable $th) {
+            DB::rollback();
+            $value['data'] = false;
+            return $value;
+        }
+    }
+    public function getDataEmployee($id)
+    {
+        try {
+            $data = Employe::find($id);
+            $salaryNew = $this->dateSalary($data->salary_pesos);
+            $value['success'] = true;
+            $value['data'] = $data;
+            $value['data']['salary_dollar_to_6_mon'] = $salaryNew->USD;
+            $value['data']['salary_pesos_to_6_mon'] = $salaryNew->MXN;
+        } catch (\Throwable $th) {
+            $value['data'] = $th;
+            $value['success'] = false;
+        }
+        return $value;
+    }
+    private function dateSalary($salary)
+    {
+        $pemon = ((($salary / 100) * 5) * 6) + $salary;
+        $object = array(
+            "typeSalary" => "MXN",
+            "salary" => $pemon,
+        );
+        $preobj = json_decode(json_encode($object));
+        return $this->coinType($preobj);
+    }
 }
-
-/*
-try {
-    DB::beginTransaction();
-    // database queries here
-    DB::commit();
-} catch (\PDOException $e) {
-    // Woopsy
-    DB::rollBack();
-}
-*/
